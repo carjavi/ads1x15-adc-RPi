@@ -1,6 +1,6 @@
 <p align="center"><img src="./img/ads1x15.png" width="400"   alt=" " /></p>
 <h1 align="center">How to Use ADS1x15 With the Raspberry Pi</h1> 
-<h4 align="right">Month 24</h4>
+<h4 align="right">Sep 24</h4>
 
 <img src="https://img.shields.io/badge/OS-Linux%20GNU-yellowgreen">
 <img src="https://img.shields.io/badge/Hardware-Raspberry%20ver%204-red">
@@ -11,7 +11,7 @@
 # Table of contents
 - [Table of contents](#table-of-contents)
 - [Install on Python](#install-on-python)
-  - [code](#code)
+  - [Code](#code)
   - [Uso de un LM35 en el ads1x15](#uso-de-un-lm35-en-el-ads1x15)
 - [Install on NodeJS](#install-on-nodejs)
 - [Troubleshooting](#troubleshooting)
@@ -46,9 +46,9 @@ sudo pip install adafruit-blinka
 ```
 <br>
 
-## code
+## Code
 
-```ads1x15-python.py``` con esta app podemos ver la ADC de los 4 canales:
+```ads1x15-python.py``` con esta app podemos ver el ADC de los 4 canales:
 ```python
 # sudo pip install adafruit-circuitpython-ads1x15
 # sudo pip install board
