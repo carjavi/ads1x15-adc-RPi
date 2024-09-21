@@ -11,38 +11,42 @@
 # Table of contents
 - [Table of contents](#table-of-contents)
 - [Install on Python](#install-on-python)
-  - [Uso de un LM35 en el](#uso-de-un-lm35-en-el)
+  - [code](#code)
+  - [Uso de un LM35 en el ads1x15](#uso-de-un-lm35-en-el-ads1x15)
+- [Install on NodeJS](#install-on-nodejs)
 - [Troubleshooting](#troubleshooting)
 
 <br>
 
-El módulo se llama ADS1015/ADS1115 porque puede configurarse como uno o como el otro. Cuando se configura como ads1015 su resolución es de 12-bit y cuando se configura como ads1115 su resolución es de 16-bit. La ganancia es de 1 por default, y si cambiamos la ganancia afectara la precisión. El código esta resumido el detalle con si variamos la ganancia. 
+El módulo se llama ADS1015/ADS1115 porque puede configurarse como uno o como el otro. Cuando se configura como ads1015 su resolución es de 12-bit y cuando se configura como ads1115 su resolución es de 16-bit. En estos ejemplo solo vamos a usarlo como un ads1115. La ganancia es de 1 por default, si cambiamos la ganancia afectara la precisión. El código esta resumido el detalle de como varia si cambiamos la ganancia. 
 
 
 # Install on Python
-1. Habilitar I2C en Raspberry Pi:
+1. Habilitar I2C en Raspberry Pi: <br>
 Ejecuta sudo raspi-config. Selecciona Interfacing Options y luego selecciona I2C. Habilita el I2C. Reinicia la Raspberry Pi con sudo reboot.
 
-2. Instalar herramientas de I2C:
+2. Instalar herramientas de I2C:  <br>
 Para verificar que el módulo RTC esté correctamente conectado, instala las herramientas de I2C.
 ```bash
 sudo apt-get update && sudo apt-get full-upgrade
 sudo apt-get install i2c-tools
 sudo reboot
 ```
-3. Verificar direccion del ADS1x15 (typically 0x48):
+3. Verificar direccion del ADS1x15 (typically 0x48): <br>
 Ejecuta el siguiente comando para asegurarte de que la Raspberry Pi detecta el dispositivo:
 ```
 sudo i2cdetect -y 
 ```
 
-1. Livbrerias 
+1. Librerias 
 ```bash
 sudo pip install adafruit-circuitpython-ads1x15
 sudo pip install board
 sudo pip install adafruit-blinka
 ```
 <br>
+
+## code
 
 ```ads1x15-python.py``` con esta app podemos ver la ADC de los 4 canales:
 ```python
@@ -74,7 +78,6 @@ Si solo necesitas medir temperaturas comunes (por ejemplo, de 0 a 100°C),
 puedes usar una ganancia menor, como 1 (±4.096V).
 
 Note you can change the I2C address from its default (0x48), and/or the I2C
-
 """
 
 import time
@@ -111,9 +114,9 @@ while True:
 
 ```
 
-## Uso de un LM35 en el 
+## Uso de un LM35 en el ads1x15
 
-```ads1x15-lm35```
+```ads1x15-lm35.py```
 
 ```python
 """
@@ -179,9 +182,44 @@ except KeyboardInterrupt:
 
 ```
 
-> :memo: **Note:* el pin Vcc del LM35 va a 5V
+> :memo: **Note:** El pin Vcc del LM35 va a 5V
+
+<br>
 
 
+# Install on NodeJS
+
+```javascript
+npm i node-ads1x15
+```
+
+```javascript
+//ADC
+var ads1x15 = require("node-ads1x15");
+var chip = 0; //0 for ads1015, 1 for ads1115
+var adc = new ads1x15(chip); //Simple usage (default ADS address on pi 2b or 3):
+var channel = 0; //channel 0, 1, 2, or 3...
+var samplesPerSecond = "250"; // see index.js for allowed values for your chip
+var progGainAmp = "4096"; // see index.js for allowed values for your chip
+var ADC;
+
+function ADC1015() { 
+    if (!adc.busy) {
+        adc.readADCSingleEnded(channel, progGainAmp, samplesPerSecond, function(err,data) {
+            if (err) {
+                throw err;
+            }
+            ADC = data;
+            console.log(ADC);
+        }
+    }
+}
+
+setInterval(function() {
+    ADC1015();
+}, 10)
+
+```
 
 <br>
 
